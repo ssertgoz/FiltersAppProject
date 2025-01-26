@@ -10,36 +10,37 @@ import '../services/image_processing_service.dart';
 class ImageState {
   final File? originalImage;
   final File? currentImage;
-  final bool isProcessing;
   final List<ProcessingStep> history;
   final int currentStepIndex;
+  final bool isProcessing;
+  final bool hasFilteredImage;
 
   ImageState({
     this.originalImage,
     this.currentImage,
-    this.isProcessing = false,
     this.history = const [],
     this.currentStepIndex = -1,
-  });
-
-  bool get canUndo => currentStepIndex > -1;
-  bool get canRedo => currentStepIndex < history.length - 1;
+    this.isProcessing = false,
+  }) : hasFilteredImage = history.isNotEmpty;
 
   ImageState copyWith({
     File? originalImage,
     File? currentImage,
-    bool? isProcessing,
     List<ProcessingStep>? history,
     int? currentStepIndex,
+    bool? isProcessing,
   }) {
     return ImageState(
       originalImage: originalImage ?? this.originalImage,
       currentImage: currentImage ?? this.currentImage,
-      isProcessing: isProcessing ?? this.isProcessing,
       history: history ?? this.history,
       currentStepIndex: currentStepIndex ?? this.currentStepIndex,
+      isProcessing: isProcessing ?? this.isProcessing,
     );
   }
+
+  bool get canUndo => currentStepIndex > -1;
+  bool get canRedo => currentStepIndex < history.length - 1;
 }
 
 class ProcessingStep {
@@ -85,14 +86,20 @@ class ImageNotifier extends StateNotifier<ImageState> {
     state = state.copyWith(isProcessing: true);
 
     try {
-      // Get input image based on whether it's a new filter or parameter update
-      final inputImage = state.history.isEmpty
-          ? state.originalImage! // For first filter, always use original
-          : (isNewFilter
-              ? state.history.last.image // For new filter after first, use last image
-              : state.history[state.currentStepIndex].filter == filter
-                  ? state.originalImage! // If updating current filter, use original
-                  : state.history[state.currentStepIndex - 1].image); // For updating other filters, use previous
+      // Determine input image based on current state and operation
+      File inputImage;
+      if (state.history.isEmpty) {
+        // First filter always uses original image
+        inputImage = state.originalImage!;
+      } else if (!isNewFilter) {
+        // When updating a filter, use the input that was used to create it
+        inputImage = state.currentStepIndex == 0 
+            ? state.originalImage! 
+            : state.history[state.currentStepIndex - 1].image;
+      } else {
+        // New filter always uses the last filtered image as input
+        inputImage = state.history.last.image;
+      }
 
       final processedImage = await ImageProcessingService.applyFilter(
         inputImage,
@@ -102,21 +109,19 @@ class ImageNotifier extends StateNotifier<ImageState> {
       if (processedImage != null) {
         List<ProcessingStep> newHistory;
 
-        if (!isNewFilter && state.history.isNotEmpty) {
-          // Updating parameters - replace current filter
+        if (!isNewFilter && state.currentStepIndex >= 0) {
+          // Updating existing filter
           newHistory = List<ProcessingStep>.from(state.history);
-          if (state.currentStepIndex < newHistory.length) {
-            newHistory[state.currentStepIndex] = ProcessingStep(
-              filter: filter,
-              image: processedImage,
-            );
-            // Remove subsequent steps if we're modifying a previous step
-            if (state.currentStepIndex < newHistory.length - 1) {
-              newHistory = newHistory.sublist(0, state.currentStepIndex + 1);
-            }
+          newHistory[state.currentStepIndex] = ProcessingStep(
+            filter: filter,
+            image: processedImage,
+          );
+          // Remove subsequent steps if we're modifying a previous step
+          if (state.currentStepIndex < newHistory.length - 1) {
+            newHistory = newHistory.sublist(0, state.currentStepIndex + 1);
           }
         } else {
-          // New filter - add to history
+          // Adding new filter
           newHistory = List<ProcessingStep>.from(state.history)
             ..add(ProcessingStep(
               filter: filter,

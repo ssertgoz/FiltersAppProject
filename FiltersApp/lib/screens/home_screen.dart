@@ -34,20 +34,21 @@ class HomeScreen extends ConsumerWidget {
             ),
           if (hasImage)
             IconButton(
-              icon: const Icon(Icons.check, color: Colors.white),
-              onPressed: () async {
-                final success = await ref.read(imageProvider.notifier).saveToGallery();
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        success ? 'Image saved to gallery' : 'Failed to save image'
-                      ),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                }
-              },
+              icon: const Icon(Icons.save),
+              onPressed: imageState.hasFilteredImage
+                  ? () async {
+                      final success = await ref
+                          .read(imageProvider.notifier)
+                          .saveToGallery();
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Image saved to gallery'),
+                          ),
+                        );
+                      }
+                    }
+                  : null,
             ),
         ],
         title: const Text(
@@ -68,19 +69,13 @@ class HomeScreen extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
-                      icon: Icon(
-                        Icons.undo,
-                        color: hasImage ? Colors.white : Colors.white38,
-                      ),
-                      onPressed: hasImage && imageState.canUndo
+                      icon: const Icon(Icons.undo),
+                      onPressed: imageState.hasFilteredImage && imageState.canUndo
                           ? () => ref.read(imageProvider.notifier).undo()
                           : null,
                     ),
                     IconButton(
-                      icon: Icon(
-                        Icons.compare_arrows,
-                        color: hasImage ? Colors.white : Colors.white38,
-                      ),
+                      icon: const Icon(Icons.compare_arrows),
                       onPressed: hasImage
                           ? () {
                               final isComparing = ref.read(compareProvider);
@@ -89,11 +84,8 @@ class HomeScreen extends ConsumerWidget {
                           : null,
                     ),
                     IconButton(
-                      icon: Icon(
-                        Icons.redo,
-                        color: hasImage ? Colors.white : Colors.white38,
-                      ),
-                      onPressed: hasImage && imageState.canRedo
+                      icon: const Icon(Icons.redo),
+                      onPressed: imageState.hasFilteredImage && imageState.canRedo
                           ? () => ref.read(imageProvider.notifier).redo()
                           : null,
                     ),
