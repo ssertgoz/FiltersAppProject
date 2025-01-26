@@ -12,6 +12,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hasImage = ref.watch(imageProvider).currentImage != null;
+    final imageState = ref.watch(imageProvider);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -64,27 +65,34 @@ class HomeScreen extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.rotate_left, color: Colors.white),
-                      onPressed: hasImage ? () {} : null,
-                    ),
-                    GestureDetector(
-                      onTapDown: hasImage 
-                          ? (_) => ref.read(compareProvider.notifier).state = true
-                          : null,
-                      onTapUp: hasImage 
-                          ? (_) => ref.read(compareProvider.notifier).state = false
-                          : null,
-                      onTapCancel: hasImage 
-                          ? () => ref.read(compareProvider.notifier).state = false
-                          : null,
-                      child: IconButton(
-                        icon: const Icon(Icons.compare, color: Colors.white),
-                        onPressed: null, // We're using GestureDetector instead
+                      icon: Icon(
+                        Icons.undo,
+                        color: hasImage ? Colors.white : Colors.white38,
                       ),
+                      onPressed: hasImage && imageState.canUndo
+                          ? () => ref.read(imageProvider.notifier).undo()
+                          : null,
                     ),
                     IconButton(
-                      icon: const Icon(Icons.rotate_right, color: Colors.white),
-                      onPressed: hasImage ? () {} : null,
+                      icon: Icon(
+                        Icons.compare_arrows,
+                        color: hasImage ? Colors.white : Colors.white38,
+                      ),
+                      onPressed: hasImage
+                          ? () {
+                              final isComparing = ref.read(compareProvider);
+                              ref.read(compareProvider.notifier).state = !isComparing;
+                            }
+                          : null,
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.redo,
+                        color: hasImage ? Colors.white : Colors.white38,
+                      ),
+                      onPressed: hasImage && imageState.canRedo
+                          ? () => ref.read(imageProvider.notifier).redo()
+                          : null,
                     ),
                   ],
                 ),

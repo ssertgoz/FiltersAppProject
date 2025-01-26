@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/image_provider.dart';
-import '../providers/selected_filter_provider.dart';
-import '../models/filter.dart';
 import '../providers/compare_provider.dart';
+import 'comparison_slider.dart';
 
 class ImageEditor extends ConsumerWidget {
   const ImageEditor({super.key});
@@ -11,7 +10,7 @@ class ImageEditor extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageState = ref.watch(imageProvider);
-    final selectedFilter = ref.watch(selectedFilterProvider);
+
     final isComparing = ref.watch(compareProvider);
 
     return Column(
@@ -53,11 +52,19 @@ class ImageEditor extends ConsumerWidget {
                         ),
                       )
                     else
-                      Image.file(
-                        isComparing ? imageState.originalImage! : imageState.currentImage!,
-                        fit: BoxFit.cover,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: isComparing
+                            ? ComparisonSlider(
+                                beforeImage: imageState.originalImage!,
+                                afterImage: imageState.currentImage!,
+                                isComparing: isComparing,
+                              )
+                            : Image.file(
+                                imageState.currentImage!,
+                                fit: BoxFit.cover,
+                              ),
                       ),
-                    
                     if (imageState.isProcessing)
                       Container(
                         color: Colors.black54,
@@ -88,7 +95,7 @@ class ImageEditor extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final isOriginal = index == 0;
                       final isSelected = index - 1 == imageState.currentStepIndex;
-                      
+
                       return GestureDetector(
                         onTap: () {
                           if (isOriginal) {
@@ -135,8 +142,7 @@ class ImageEditor extends ConsumerWidget {
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 10,
-                                      fontWeight:
-                                          isSelected ? FontWeight.bold : FontWeight.normal,
+                                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -172,28 +178,10 @@ class ImageEditor extends ConsumerWidget {
                     },
                   ),
                 ),
-                // Undo/Redo controls
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.undo, color: Colors.white),
-                      onPressed: imageState.canUndo
-                          ? () => ref.read(imageProvider.notifier).undo()
-                          : null,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.redo, color: Colors.white),
-                      onPressed: imageState.canRedo
-                          ? () => ref.read(imageProvider.notifier).redo()
-                          : null,
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
       ],
     );
   }
-} 
+}
