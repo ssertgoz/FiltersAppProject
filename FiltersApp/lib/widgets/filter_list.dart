@@ -51,7 +51,7 @@ class FilterList extends ConsumerWidget {
                     ref.read(selectedFilterProvider.notifier).state = filter;
                     ref.read(showSliderProvider.notifier).state = 
                         FilterConfig.filters[filter.name]?.parameters.isNotEmpty == true;
-                    ref.read(imageProvider.notifier).applyFilter(filter);
+                    ref.read(imageProvider.notifier).applyFilter(filter, isNewFilter: true);
                   }
                 }
               )
@@ -101,7 +101,7 @@ class FilterList extends ConsumerWidget {
                   intensity: value,
                 );
                 ref.read(selectedFilterProvider.notifier).state = updatedFilter;
-                ref.read(imageProvider.notifier).applyFilter(updatedFilter);
+                ref.read(imageProvider.notifier).applyFilter(updatedFilter, isNewFilter: false);
               },
             ),
           ),

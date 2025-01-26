@@ -1,39 +1,57 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:io';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_filtering_app/models/filter.dart';
 
 class ImageState {
   final File? originalImage;
   final File? currentImage;
   final bool isProcessing;
-  final List<File> history;
-  final int currentStep;
+  final List<ProcessingStep> history;
+  final int currentStepIndex;
 
   ImageState({
     this.originalImage,
     this.currentImage,
     this.isProcessing = false,
     this.history = const [],
-    this.currentStep = -1,
+    this.currentStepIndex = -1,
   });
+
+  bool get canUndo => currentStepIndex > -1;
+  bool get canRedo => currentStepIndex < history.length - 1;
 
   ImageState copyWith({
     File? originalImage,
     File? currentImage,
     bool? isProcessing,
-    List<File>? history,
-    int? currentStep,
+    List<ProcessingStep>? history,
+    int? currentStepIndex,
   }) {
     return ImageState(
       originalImage: originalImage ?? this.originalImage,
       currentImage: currentImage ?? this.currentImage,
       isProcessing: isProcessing ?? this.isProcessing,
       history: history ?? this.history,
-      currentStep: currentStep ?? this.currentStep,
+      currentStepIndex: currentStepIndex ?? this.currentStepIndex,
     );
   }
 }
 
-final imageStateProvider = StateNotifierProvider<ImageStateNotifier, ImageState>((ref) {
+class ProcessingStep {
+  final File image;
+  final Filter filter;
+  final DateTime timestamp;
+
+  ProcessingStep({
+    required this.image,
+    required this.filter,
+    DateTime? timestamp,
+  }) : timestamp = timestamp ?? DateTime.now();
+}
+
+final imageStateProvider =
+    StateNotifierProvider<ImageStateNotifier, ImageState>((ref) {
   return ImageStateNotifier();
 });
 
@@ -41,4 +59,4 @@ class ImageStateNotifier extends StateNotifier<ImageState> {
   ImageStateNotifier() : super(ImageState());
 
   // TODO: Implement image state management methods
-} 
+}

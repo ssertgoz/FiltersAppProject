@@ -98,13 +98,20 @@ class ImageProcessingService {
     }
   }
 
+  static int _filterCounter = 0;
+
   static Future<File> _createOutputFile(File inputFile) async {
     final directory = await getTemporaryDirectory();
-    final fileName = path.basenameWithoutExtension(inputFile.path);
     final extension = path.extension(inputFile.path);
+    
+    // Reset counter if it gets too large
+    if (_filterCounter > 1000) {
+      _filterCounter = 0;
+    }
+    
     final outputPath = path.join(
       directory.path,
-      '${fileName}_filtered_${DateTime.now().millisecondsSinceEpoch}$extension'
+      'filtered_${_filterCounter++}$extension'
     );
     return File(outputPath);
   }
