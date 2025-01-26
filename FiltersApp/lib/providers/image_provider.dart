@@ -56,12 +56,20 @@ class ProcessingStep {
 }
 
 final imageProvider = StateNotifierProvider<ImageNotifier, ImageState>((ref) {
-  return ImageNotifier();
+  return ImageNotifier(ImageProcessingService());
 });
 
 class ImageNotifier extends StateNotifier<ImageState> {
-  ImageNotifier() : super(ImageState());
+  final ImageProcessingService _imageProcessingService;
   final _picker = ImagePicker();
+
+  ImageNotifier(this._imageProcessingService) : super(ImageState());
+
+  @override
+  void dispose() {
+    _imageProcessingService.dispose();
+    super.dispose();
+  }
 
   Future<void> pickImage() async {
     try {
@@ -101,7 +109,7 @@ class ImageNotifier extends StateNotifier<ImageState> {
         inputImage = state.history.last.image;
       }
 
-      final processedImage = await ImageProcessingService.applyFilter(
+      final processedImage = await _imageProcessingService.processImage(
         inputImage,
         filter,
       );

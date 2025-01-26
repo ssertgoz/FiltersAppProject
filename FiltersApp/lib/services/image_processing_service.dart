@@ -1,106 +1,66 @@
 import 'dart:io';
+import 'dart:isolate';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:ffi/ffi.dart';
 import '../models/filter.dart';
 import 'image_processing_bindings.dart';
+import 'isolate_worker.dart';
 
 class ImageProcessingService {
-  static Future<File?> applyFilter(File inputImage, Filter filter) async {
-    if (!ImageProcessingBindings.isInitialized) {
-      print('Native processing not initialized');
-      return inputImage;  // Return original image if native processing is not available
-    }
+  Isolate? _isolate;
+  SendPort? _sendPort;
+  ReceivePort? _receivePort;
 
+  Future<void> _initializeIsolate() async {
+    if (_isolate != null) return;
+
+    _receivePort = ReceivePort();
+    _isolate = await Isolate.spawn(isolateFunction, _receivePort!.sendPort);
+    _sendPort = await _receivePort!.first;
+  }
+
+  Future<File?> processImage(File inputImage, Filter filter) async {
     try {
-      final outputFile = await _createOutputFile(inputImage);
-      final inputPath = inputImage.path.toNativeUtf8();
-      final outputPath = outputFile.path.toNativeUtf8();
-
-      try {
-        switch (filter.type) {
-          case FilterType.original:
-            return inputImage;
-            
-          case FilterType.grayscale:
-            ImageProcessingBindings.processGrayscale(inputPath, outputPath);
-            break;
-            
-          case FilterType.blur:
-            ImageProcessingBindings.processBlur(
-              inputPath, 
-              outputPath, 
-              filter.intensity ?? 5.0
-            );
-            break;
-            
-          case FilterType.sharpen:
-            ImageProcessingBindings.processSharpen(
-              inputPath, 
-              outputPath, 
-              filter.intensity ?? 0.5
-            );
-            break;
-            
-          case FilterType.edgeDetection:
-            ImageProcessingBindings.processEdgeDetection(inputPath, outputPath);
-            break;
-            
-          case FilterType.brightness:
-            ImageProcessingBindings.processBrightness(
-              inputPath, 
-              outputPath, 
-              filter.intensity ?? 1.0
-            );
-            break;
-            
-          case FilterType.contrast:
-            ImageProcessingBindings.processContrast(
-              inputPath, 
-              outputPath, 
-              filter.intensity ?? 1.0
-            );
-            break;
-            
-          case FilterType.saturation:
-            ImageProcessingBindings.processSaturation(
-              inputPath, 
-              outputPath, 
-              filter.intensity ?? 1.0
-            );
-            break;
-            
-          case FilterType.sepia:
-            ImageProcessingBindings.processSepia(inputPath, outputPath);
-            break;
-            
-          case FilterType.invert:
-            ImageProcessingBindings.processInvert(inputPath, outputPath);
-            break;
-            
-          case FilterType.threshold:
-            ImageProcessingBindings.processThreshold(
-              inputPath, 
-              outputPath, 
-              filter.intensity ?? 127.0
-            );
-            break;
-        }
-
-        return outputFile;
-      } finally {
-        calloc.free(inputPath);
-        calloc.free(outputPath);
+      await _initializeIsolate();
+      
+      if (_sendPort == null) {
+        throw Exception('Failed to initialize isolate');
       }
+
+      final responsePort = ReceivePort();
+      _sendPort!.send(FilterMessage(
+        inputImage.path, 
+        filter,
+        responsePort.sendPort
+      ));
+
+      final result = await responsePort.first;
+      responsePort.close();
+
+      if (result == null) {
+        print('No result from isolate');
+        return null;
+      }
+
+      return File(result as String);
     } catch (e) {
-      print('Error applying filter: $e');
+      print('Error processing image: $e');
       return null;
     }
   }
 
-  static int _filterCounter = 0;
+  void dispose() {
+    _isolate?.kill();
+    _isolate = null;
+    _sendPort = null;
+    _receivePort?.close();
+    _receivePort = null;
+  }
 
-  static Future<File> _createOutputFile(File inputFile) async {
+  int _filterCounter = 0;
+
+  Future<File> _createOutputFile(File inputFile) async {
     final directory = await getTemporaryDirectory();
     final extension = path.extension(inputFile.path);
     
