@@ -35,15 +35,18 @@ class HomeScreen extends ConsumerWidget {
           if (hasImage)
             IconButton(
               icon: const Icon(Icons.check, color: Colors.white),
-              onPressed: () {
-                // TODO: Implement save functionality
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content:
-                        Text('Save functionality will be implemented soon'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+              onPressed: () async {
+                final success = await ref.read(imageProvider.notifier).saveToGallery();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        success ? 'Image saved to gallery' : 'Failed to save image'
+                      ),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                }
               },
             ),
         ],

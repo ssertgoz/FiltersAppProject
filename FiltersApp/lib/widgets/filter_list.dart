@@ -47,11 +47,16 @@ class FilterList extends ConsumerWidget {
                     ref.read(showSliderProvider.notifier).state = 
                         !ref.read(showSliderProvider);
                   } else {
-                    // If different filter selected, select it and show slider if it has parameters
-                    ref.read(selectedFilterProvider.notifier).state = filter;
-                    ref.read(showSliderProvider.notifier).state = 
-                        FilterConfig.filters[filter.name]?.parameters.isNotEmpty == true;
-                    ref.read(imageProvider.notifier).applyFilter(filter, isNewFilter: true);
+                    // Special handling for Original filter
+                    if (filter.name.toLowerCase() == 'original') {
+                      ref.read(imageProvider.notifier).clearHistory();
+                    } else {
+                      // If different filter selected, select it and show slider if it has parameters
+                      ref.read(selectedFilterProvider.notifier).state = filter;
+                      ref.read(showSliderProvider.notifier).state = 
+                          FilterConfig.filters[filter.name]?.parameters.isNotEmpty == true;
+                      ref.read(imageProvider.notifier).applyFilter(filter, isNewFilter: true);
+                    }
                   }
                 }
               )

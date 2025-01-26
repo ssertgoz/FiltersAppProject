@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import '../services/image_processing_service.dart';
+import 'package:saver_gallery/saver_gallery.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import '../models/filter.dart';
-import 'dart:io';
+import '../services/image_processing_service.dart';
 
 class ImageState {
   final File? originalImage;
@@ -76,41 +79,49 @@ class ImageNotifier extends StateNotifier<ImageState> {
     }
   }
 
-  Future<void> applyFilter(Filter filter, {bool isNewFilter = false}) async {
+  Future<void> applyFilter(Filter filter, {bool isNewFilter = true}) async {
     if (state.originalImage == null) return;
 
     state = state.copyWith(isProcessing: true);
-    
+
     try {
       // Get input image based on whether it's a new filter or parameter update
-      final inputImage = state.history.isEmpty 
-          ? state.originalImage!
-          : (isNewFilter 
-              ? state.history.last.image  // For new filter, use last image
-              : state.history[state.currentStepIndex - 1].image);  // For parameter update, use previous image
-      
+      final inputImage = state.history.isEmpty
+          ? state.originalImage! // For first filter, always use original
+          : (isNewFilter
+              ? state.history.last.image // For new filter after first, use last image
+              : state.history[state.currentStepIndex].filter == filter
+                  ? state.originalImage! // If updating current filter, use original
+                  : state.history[state.currentStepIndex - 1].image); // For updating other filters, use previous
+
       final processedImage = await ImageProcessingService.applyFilter(
         inputImage,
         filter,
       );
-      
+
       if (processedImage != null) {
         List<ProcessingStep> newHistory;
-        
+
         if (!isNewFilter && state.history.isNotEmpty) {
-          // Updating parameters - just update current filter
+          // Updating parameters - replace current filter
           newHistory = List<ProcessingStep>.from(state.history);
-          newHistory[state.currentStepIndex] = ProcessingStep(
-            image: processedImage,
-            filter: filter,
-          );
+          if (state.currentStepIndex < newHistory.length) {
+            newHistory[state.currentStepIndex] = ProcessingStep(
+              filter: filter,
+              image: processedImage,
+            );
+            // Remove subsequent steps if we're modifying a previous step
+            if (state.currentStepIndex < newHistory.length - 1) {
+              newHistory = newHistory.sublist(0, state.currentStepIndex + 1);
+            }
+          }
         } else {
-          // Adding new filter to chain
-          newHistory = List<ProcessingStep>.from(state.history);
-          newHistory.add(ProcessingStep(
-            image: processedImage,
-            filter: filter,
-          ));
+          // New filter - add to history
+          newHistory = List<ProcessingStep>.from(state.history)
+            ..add(ProcessingStep(
+              filter: filter,
+              image: processedImage,
+            ));
         }
 
         state = state.copyWith(
@@ -130,12 +141,10 @@ class ImageNotifier extends StateNotifier<ImageState> {
 
   void undo() {
     if (!state.canUndo) return;
-    
+
     final newIndex = state.currentStepIndex - 1;
-    final newImage = newIndex >= 0 
-        ? state.history[newIndex].image 
-        : state.originalImage;
-        
+    final newImage = newIndex >= 0 ? state.history[newIndex].image : state.originalImage;
+
     state = state.copyWith(
       currentImage: newImage,
       currentStepIndex: newIndex,
@@ -144,10 +153,10 @@ class ImageNotifier extends StateNotifier<ImageState> {
 
   void redo() {
     if (!state.canRedo) return;
-    
+
     final newIndex = state.currentStepIndex + 1;
     final newImage = state.history[newIndex].image;
-    
+
     state = state.copyWith(
       currentImage: newImage,
       currentStepIndex: newIndex,
@@ -164,11 +173,9 @@ class ImageNotifier extends StateNotifier<ImageState> {
 
   void goToStep(int stepIndex) {
     if (stepIndex < -1 || stepIndex >= state.history.length) return;
-    
-    final newImage = stepIndex >= 0 
-        ? state.history[stepIndex].image 
-        : state.originalImage;
-        
+
+    final newImage = stepIndex >= 0 ? state.history[stepIndex].image : state.originalImage;
+
     state = state.copyWith(
       currentImage: newImage,
       currentStepIndex: stepIndex,
@@ -177,15 +184,13 @@ class ImageNotifier extends StateNotifier<ImageState> {
 
   void deleteFilter(int index) {
     if (index < 0 || index >= state.history.length) return;
-    
+
     // Remove the filter and all subsequent filters
     final newHistory = state.history.sublist(0, index);
-    
+
     // Get the appropriate image to show
-    final currentImage = newHistory.isEmpty 
-        ? state.originalImage 
-        : newHistory.last.image;
-    
+    final currentImage = newHistory.isEmpty ? state.originalImage : newHistory.last.image;
+
     state = state.copyWith(
       currentImage: currentImage,
       history: newHistory,
@@ -193,7 +198,57 @@ class ImageNotifier extends StateNotifier<ImageState> {
     );
   }
 
+  Future<bool> _requestPermissions() async {
+    if (Platform.isAndroid) {
+      final deviceInfo = await DeviceInfoPlugin().androidInfo;
+      final sdkInt = deviceInfo.version.sdkInt;
+
+      if (sdkInt >= 33) {
+        // Android 13 and above
+        final photos = await Permission.photos.request();
+        return photos.isGranted;
+      } else {
+        // Android 12 and below
+        final storage = await Permission.storage.request();
+        return storage.isGranted;
+      }
+    }
+    return true;
+  }
+
+  Future<bool> saveToGallery() async {
+    if (state.currentImage == null) return false;
+
+    try {
+      // Request permissions first
+      final hasPermission = await _requestPermissions();
+      if (!hasPermission) {
+        print('Permission denied');
+        return false;
+      }
+
+      final result = await SaverGallery.saveFile(
+          filePath: state.currentImage!.path,
+          androidRelativePath: "Pictures/FiltersApp",
+          fileName: "filtered_image_${DateTime.now().millisecondsSinceEpoch}.jpg",
+          skipIfExists: true);
+
+      if (result.isSuccess) {
+        print('Image saved to gallery successfully');
+        // Reset the state after successful save
+        clearImage();
+        return true;
+      } else {
+        print('Failed to save image: ${result.errorMessage}');
+        return false;
+      }
+    } catch (e) {
+      print('Error saving to gallery: $e');
+      return false;
+    }
+  }
+
   void clearImage() {
     state = ImageState();
   }
-} 
+}
