@@ -1,0 +1,1 @@
+/Users/serdar/PersonalProjects/FiltersApp/build/app/intermediates/cxx/Debug/1t5b3g6e/obj/arm64-v8a
