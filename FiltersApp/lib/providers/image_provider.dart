@@ -175,6 +175,24 @@ class ImageNotifier extends StateNotifier<ImageState> {
     );
   }
 
+  void deleteFilter(int index) {
+    if (index < 0 || index >= state.history.length) return;
+    
+    // Remove the filter and all subsequent filters
+    final newHistory = state.history.sublist(0, index);
+    
+    // Get the appropriate image to show
+    final currentImage = newHistory.isEmpty 
+        ? state.originalImage 
+        : newHistory.last.image;
+    
+    state = state.copyWith(
+      currentImage: currentImage,
+      history: newHistory,
+      currentStepIndex: newHistory.isEmpty ? -1 : newHistory.length - 1,
+    );
+  }
+
   void clearImage() {
     state = ImageState();
   }
