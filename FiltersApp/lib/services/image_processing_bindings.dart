@@ -1,22 +1,25 @@
 import 'dart:ffi';
 import 'dart:io';
+
 import 'package:ffi/ffi.dart';
-import 'package:path/path.dart' as path;
+import 'package:flutter/cupertino.dart';
 
 // FFI type definitions
 typedef ProcessImageFunc = Void Function(Pointer<Utf8>, Pointer<Utf8>);
-typedef ProcessImageWithParamFunc = Void Function(Pointer<Utf8>, Pointer<Utf8>, Double);
+typedef ProcessImageWithParamFunc = Void Function(
+    Pointer<Utf8>, Pointer<Utf8>, Double);
 
 // Dart function signatures
 typedef ProcessImageDart = void Function(Pointer<Utf8>, Pointer<Utf8>);
-typedef ProcessImageWithParamDart = void Function(Pointer<Utf8>, Pointer<Utf8>, double);
+typedef ProcessImageWithParamDart = void Function(
+    Pointer<Utf8>, Pointer<Utf8>, double);
 
 class ImageProcessingBindings {
   static late final DynamicLibrary _lib;
   static bool _isInitialized = false;
 
   static bool get isInitialized => _isInitialized;
-  
+
   // Function pointers
   static late final ProcessImageDart processGrayscale;
   static late final ProcessImageWithParamDart processBlur;
@@ -34,15 +37,12 @@ class ImageProcessingBindings {
 
     try {
       final libraryPath = _getLibraryPath();
-      print('Attempting to load native library from: $libraryPath');
       _lib = DynamicLibrary.open(libraryPath);
-      print('Successfully loaded native library');
       _initializeFunctions();
       _isInitialized = true;
-      print('Successfully initialized all functions');
     } catch (e, stackTrace) {
-      print('Failed to initialize native library: $e');
-      print('Stack trace: $stackTrace');
+      debugPrint('Failed to initialize native library: $e');
+      debugPrint('Stack trace: $stackTrace');
       rethrow;
     }
   }
@@ -50,24 +50,25 @@ class ImageProcessingBindings {
   static void _initializeFunctions() {
     processGrayscale = _lib
         .lookupFunction<ProcessImageFunc, ProcessImageDart>('processGrayscale');
-    processBlur = _lib
-        .lookupFunction<ProcessImageWithParamFunc, ProcessImageWithParamDart>('processBlur');
-    processSharpen = _lib
-        .lookupFunction<ProcessImageWithParamFunc, ProcessImageWithParamDart>('processSharpen');
-    processEdgeDetection = _lib
-        .lookupFunction<ProcessImageFunc, ProcessImageDart>('processEdgeDetection');
-    processBrightness = _lib
-        .lookupFunction<ProcessImageWithParamFunc, ProcessImageWithParamDart>('processBrightness');
-    processContrast = _lib
-        .lookupFunction<ProcessImageWithParamFunc, ProcessImageWithParamDart>('processContrast');
-    processSaturation = _lib
-        .lookupFunction<ProcessImageWithParamFunc, ProcessImageWithParamDart>('processSaturation');
-    processSepia = _lib
-        .lookupFunction<ProcessImageFunc, ProcessImageDart>('processSepia');
+    processBlur = _lib.lookupFunction<ProcessImageWithParamFunc,
+        ProcessImageWithParamDart>('processBlur');
+    processSharpen = _lib.lookupFunction<ProcessImageWithParamFunc,
+        ProcessImageWithParamDart>('processSharpen');
+    processEdgeDetection =
+        _lib.lookupFunction<ProcessImageFunc, ProcessImageDart>(
+            'processEdgeDetection');
+    processBrightness = _lib.lookupFunction<ProcessImageWithParamFunc,
+        ProcessImageWithParamDart>('processBrightness');
+    processContrast = _lib.lookupFunction<ProcessImageWithParamFunc,
+        ProcessImageWithParamDart>('processContrast');
+    processSaturation = _lib.lookupFunction<ProcessImageWithParamFunc,
+        ProcessImageWithParamDart>('processSaturation');
+    processSepia =
+        _lib.lookupFunction<ProcessImageFunc, ProcessImageDart>('processSepia');
     processInvert = _lib
         .lookupFunction<ProcessImageFunc, ProcessImageDart>('processInvert');
-    processThreshold = _lib
-        .lookupFunction<ProcessImageWithParamFunc, ProcessImageWithParamDart>('processThreshold');
+    processThreshold = _lib.lookupFunction<ProcessImageWithParamFunc,
+        ProcessImageWithParamDart>('processThreshold');
   }
 
   static String _getLibraryPath() {
@@ -84,18 +85,15 @@ class ImageProcessingBindings {
 
         for (final path in possiblePaths) {
           final file = File(path);
-          print('Checking path: $path');
           if (file.existsSync()) {
-            print('Found library at: $path');
             return path;
           }
         }
 
         // Default to the first path if none exist
-        print('No library found, defaulting to first path');
         return possiblePaths.first;
       } catch (e) {
-        print('Error checking library paths: $e');
+        debugPrint('Error checking library paths: $e');
         rethrow;
       }
     } else if (Platform.isIOS) {
@@ -109,4 +107,4 @@ class ImageProcessingBindings {
     }
     throw UnsupportedError('Unsupported platform');
   }
-} 
+}

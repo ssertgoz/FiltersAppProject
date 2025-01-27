@@ -5,8 +5,8 @@ import '../models/filter_parameter.dart';
 import '../providers/filter_provider.dart';
 import '../providers/image_provider.dart';
 import '../providers/selected_filter_provider.dart';
-import 'filter_parameters_panel.dart';
 import 'filter_categories.dart';
+import 'filter_parameters_panel.dart';
 import 'filter_thumbnail.dart';
 
 // Add a provider to track slider visibility
@@ -26,7 +26,7 @@ class FilterList extends ConsumerWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
+        SizedBox(
           height: 80,
           child: showSlider && filterConfig?.parameters.isNotEmpty == true
               ? FilterParametersPanel(filterConfig: filterConfig)
@@ -39,7 +39,7 @@ class FilterList extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             children: currentFilters.map((filter) {
               return FilterThumbnail(
-                name: filter.name,
+                filter: filter,
                 isSelected: selectedFilter.name == filter.name,
                 onTap: () {
                   // If already selected, toggle slider visibility
@@ -52,11 +52,14 @@ class FilterList extends ConsumerWidget {
                       ref.read(imageProvider.notifier).clearHistory();
                     } else {
                       // If different filter selected, select it and show slider if it has parameters
-                      ref.read(selectedFilterProvider.notifier).state = filter;
-                      ref.read(showSliderProvider.notifier).state =
-                          FilterConfig.filters[filter.name]?.parameters.isNotEmpty ==
-                              true;
-                      ref.read(imageProvider.notifier)
+                      ref
+                          .read(selectedFilterProvider.notifier)
+                          .updateFilter(filter);
+                      ref.read(showSliderProvider.notifier).state = FilterConfig
+                              .filters[filter.name]?.parameters.isNotEmpty ==
+                          true;
+                      ref
+                          .read(imageProvider.notifier)
                           .applyFilter(filter, isNewFilter: true);
                     }
                   }

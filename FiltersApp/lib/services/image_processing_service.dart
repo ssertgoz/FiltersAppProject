@@ -1,10 +1,7 @@
 import 'dart:io';
 import 'dart:isolate';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'package:ffi/ffi.dart';
+
 import '../models/filter.dart';
-import 'image_processing_bindings.dart';
 import 'isolate_worker.dart';
 
 class ImageProcessingService {
@@ -23,17 +20,14 @@ class ImageProcessingService {
   Future<File?> processImage(File inputImage, Filter filter) async {
     try {
       await _initializeIsolate();
-      
+
       if (_sendPort == null) {
         throw Exception('Failed to initialize isolate');
       }
 
       final responsePort = ReceivePort();
-      _sendPort!.send(FilterMessage(
-        inputImage.path, 
-        filter,
-        responsePort.sendPort
-      ));
+      _sendPort!
+          .send(FilterMessage(inputImage.path, filter, responsePort.sendPort));
 
       final result = await responsePort.first;
       responsePort.close();
@@ -56,23 +50,5 @@ class ImageProcessingService {
     _sendPort = null;
     _receivePort?.close();
     _receivePort = null;
-  }
-
-  int _filterCounter = 0;
-
-  Future<File> _createOutputFile(File inputFile) async {
-    final directory = await getTemporaryDirectory();
-    final extension = path.extension(inputFile.path);
-    
-    // Reset counter if it gets too large
-    if (_filterCounter > 1000) {
-      _filterCounter = 0;
-    }
-    
-    final outputPath = path.join(
-      directory.path,
-      'filtered_${_filterCounter++}$extension'
-    );
-    return File(outputPath);
   }
 }

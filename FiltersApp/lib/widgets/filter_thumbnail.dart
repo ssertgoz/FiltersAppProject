@@ -1,43 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:image_filtering_app/models/filter.dart';
 
 class FilterThumbnail extends StatelessWidget {
-  final String name;
+  final Filter filter;
   final bool isSelected;
   final VoidCallback onTap;
 
   const FilterThumbnail({
     Key? key,
-    required this.name,
+    required this.filter,
     required this.isSelected,
     required this.onTap,
   }) : super(key: key);
 
   IconData? get _filterIcon {
-    switch (name.toLowerCase()) {
-      case 'grayscale':
+    switch (filter.type) {
+      case FilterType.grayscale:
         return Icons.gradient;
-      case 'blur':
+      case FilterType.blur:
         return Icons.blur_on;
-      case 'sharpen':
+      case FilterType.sharpen:
         return Icons.shape_line;
-      case 'edge detect':
+      case FilterType.edgeDetection:
         return Icons.auto_graph;
-      case 'brightness':
+      case FilterType.brightness:
         return Icons.brightness_6;
-      case 'contrast':
+      case FilterType.contrast:
         return Icons.contrast;
-      case 'saturation':
+      case FilterType.saturation:
         return Icons.palette;
-      case 'sepia':
+      case FilterType.sepia:
         return Icons.filter_vintage;
-      case 'invert':
+      case FilterType.invert:
         return Icons.invert_colors;
-      case 'threshold':
+      case FilterType.threshold:
         return Icons.tonality;
-      case 'original':
+      case FilterType.original:
         return Icons.restart_alt;
-      default:
-        return Icons.filter;
     }
   }
 
@@ -71,7 +70,7 @@ class FilterThumbnail extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                name,
+                filter.name,
                 style: TextStyle(
                   color: isSelected ? Colors.pink : Colors.white,
                   fontSize: 12,

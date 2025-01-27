@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/image_provider.dart';
+
 import '../providers/compare_provider.dart';
+import '../providers/image_provider.dart';
 import 'comparison_slider.dart';
 
 class ImageEditor extends ConsumerWidget {
@@ -10,7 +11,6 @@ class ImageEditor extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageState = ref.watch(imageProvider);
-
     final isComparing = ref.watch(compareProvider);
 
     return Column(
@@ -94,14 +94,17 @@ class ImageEditor extends ConsumerWidget {
                     itemCount: imageState.history.length + 1,
                     itemBuilder: (context, index) {
                       final isOriginal = index == 0;
-                      final isSelected = index - 1 == imageState.currentStepIndex;
+                      final isSelected =
+                          index - 1 == imageState.currentStepIndex;
 
                       return GestureDetector(
                         onTap: () {
                           if (isOriginal) {
                             ref.read(imageProvider.notifier).clearHistory();
                           } else {
-                            ref.read(imageProvider.notifier).goToStep(index - 1);
+                            ref
+                                .read(imageProvider.notifier)
+                                .goToStep(index - 1);
                           }
                         },
                         child: Container(
@@ -109,7 +112,8 @@ class ImageEditor extends ConsumerWidget {
                           margin: const EdgeInsets.symmetric(horizontal: 4),
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: isSelected ? Colors.pink : Colors.transparent,
+                              color:
+                                  isSelected ? Colors.pink : Colors.transparent,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(8),
@@ -128,7 +132,8 @@ class ImageEditor extends ConsumerWidget {
                                         child: Image.file(
                                           isOriginal
                                               ? imageState.originalImage!
-                                              : imageState.history[index - 1].image,
+                                              : imageState
+                                                  .history[index - 1].image,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -138,11 +143,14 @@ class ImageEditor extends ConsumerWidget {
                                   Text(
                                     isOriginal
                                         ? 'Original'
-                                        : imageState.history[index - 1].filter.name,
+                                        : imageState
+                                            .history[index - 1].filter.name,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 10,
-                                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                      fontWeight: isSelected
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -155,7 +163,9 @@ class ImageEditor extends ConsumerWidget {
                                   right: 4,
                                   child: GestureDetector(
                                     onTap: () {
-                                      ref.read(imageProvider.notifier).deleteFilter(index - 1);
+                                      ref
+                                          .read(imageProvider.notifier)
+                                          .deleteFilter(index - 1);
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.all(2),

@@ -1,9 +1,12 @@
 import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:saver_gallery/saver_gallery.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:saver_gallery/saver_gallery.dart';
+
 import '../models/filter.dart';
 import '../services/image_processing_service.dart';
 
@@ -84,7 +87,7 @@ class ImageNotifier extends StateNotifier<ImageState> {
         );
       }
     } catch (e) {
-      print('Error picking image: $e');
+      debugPrint('Error picking image: $e');
     }
   }
 
@@ -101,8 +104,8 @@ class ImageNotifier extends StateNotifier<ImageState> {
         inputImage = state.originalImage!;
       } else if (!isNewFilter) {
         // When updating a filter, use the input that was used to create it
-        inputImage = state.currentStepIndex == 0 
-            ? state.originalImage! 
+        inputImage = state.currentStepIndex == 0
+            ? state.originalImage!
             : state.history[state.currentStepIndex - 1].image;
       } else {
         // New filter always uses the last filtered image as input
@@ -140,14 +143,15 @@ class ImageNotifier extends StateNotifier<ImageState> {
         state = state.copyWith(
           currentImage: processedImage,
           history: newHistory,
-          currentStepIndex: isNewFilter ? newHistory.length - 1 : state.currentStepIndex,
+          currentStepIndex:
+              isNewFilter ? newHistory.length - 1 : state.currentStepIndex,
           isProcessing: false,
         );
       } else {
         state = state.copyWith(isProcessing: false);
       }
     } catch (e) {
-      print('Error applying filter: $e');
+      debugPrint('Error applying filter: $e');
       state = state.copyWith(isProcessing: false);
     }
   }
@@ -156,7 +160,8 @@ class ImageNotifier extends StateNotifier<ImageState> {
     if (!state.canUndo) return;
 
     final newIndex = state.currentStepIndex - 1;
-    final newImage = newIndex >= 0 ? state.history[newIndex].image : state.originalImage;
+    final newImage =
+        newIndex >= 0 ? state.history[newIndex].image : state.originalImage;
 
     state = state.copyWith(
       currentImage: newImage,
@@ -187,7 +192,8 @@ class ImageNotifier extends StateNotifier<ImageState> {
   void goToStep(int stepIndex) {
     if (stepIndex < -1 || stepIndex >= state.history.length) return;
 
-    final newImage = stepIndex >= 0 ? state.history[stepIndex].image : state.originalImage;
+    final newImage =
+        stepIndex >= 0 ? state.history[stepIndex].image : state.originalImage;
 
     state = state.copyWith(
       currentImage: newImage,
@@ -202,7 +208,8 @@ class ImageNotifier extends StateNotifier<ImageState> {
     final newHistory = state.history.sublist(0, index);
 
     // Get the appropriate image to show
-    final currentImage = newHistory.isEmpty ? state.originalImage : newHistory.last.image;
+    final currentImage =
+        newHistory.isEmpty ? state.originalImage : newHistory.last.image;
 
     state = state.copyWith(
       currentImage: currentImage,
@@ -236,27 +243,27 @@ class ImageNotifier extends StateNotifier<ImageState> {
       // Request permissions first
       final hasPermission = await _requestPermissions();
       if (!hasPermission) {
-        print('Permission denied');
+        debugPrint('Permission denied');
         return false;
       }
 
       final result = await SaverGallery.saveFile(
           filePath: state.currentImage!.path,
           androidRelativePath: "Pictures/FiltersApp",
-          fileName: "filtered_image_${DateTime.now().millisecondsSinceEpoch}.jpg",
+          fileName:
+              "filtered_image_${DateTime.now().millisecondsSinceEpoch}.jpg",
           skipIfExists: true);
 
       if (result.isSuccess) {
-        print('Image saved to gallery successfully');
         // Reset the state after successful save
         clearImage();
         return true;
       } else {
-        print('Failed to save image: ${result.errorMessage}');
+        debugPrint('Failed to save image: ${result.errorMessage}');
         return false;
       }
     } catch (e) {
-      print('Error saving to gallery: $e');
+      debugPrint('Error saving to gallery: $e');
       return false;
     }
   }
