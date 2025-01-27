@@ -1,8 +1,9 @@
+import 'package:filters_app/services/image_processing_bindings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_filtering_app/services/image_processing_bindings.dart';
 
 import 'screens/home_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,15 +25,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Image Filter App',
-      theme: ThemeData.dark().copyWith(
+      title: 'FiltersApp',
+      theme: ThemeData(
+        primarySwatch: Colors.pink,
         scaffoldBackgroundColor: Colors.black,
-        colorScheme: const ColorScheme.dark().copyWith(
-          primary: Colors.pink,
-          secondary: Colors.pink,
-        ),
+        brightness: Brightness.dark,
       ),
-      home: const HomeScreen(),
+      home: FutureBuilder(
+        future: Future.delayed(
+            const Duration(seconds: 2)), // Show splash for 2 seconds
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SplashScreen();
+          }
+          return const HomeScreen();
+        },
+      ),
     );
   }
 }

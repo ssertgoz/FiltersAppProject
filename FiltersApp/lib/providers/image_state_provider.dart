@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_filtering_app/models/filter.dart';
+
+import '../models/filter.dart';
 
 class ImageState {
   final File? originalImage;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:image_filtering_app/models/filter.dart';
+
+import '../models/filter.dart';
 
 class FilterThumbnail extends StatelessWidget {
   final Filter filter;
