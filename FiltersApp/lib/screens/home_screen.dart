@@ -5,6 +5,7 @@ import '../providers/image_provider.dart';
 import '../providers/compare_provider.dart';
 import '../widgets/filter_list.dart';
 import '../widgets/image_editor.dart';
+import '../core/constants/app_colors.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -15,11 +16,11 @@ class HomeScreen extends ConsumerWidget {
     final imageState = ref.watch(imageProvider);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.black,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
+          icon: const Icon(Icons.close, color: AppColors.white),
           onPressed: () {
             if (hasImage) {
               ref.read(imageProvider.notifier).clearImage();
@@ -29,7 +30,7 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           if (!hasImage)
             IconButton(
-              icon: const Icon(Icons.add_photo_alternate, color: Colors.white),
+              icon: const Icon(Icons.add_photo_alternate, color: AppColors.white),
               onPressed: () => ref.read(imageProvider.notifier).pickImage(),
             ),
           if (hasImage)
@@ -53,7 +54,7 @@ class HomeScreen extends ConsumerWidget {
         ],
         title: const Text(
           'Filters',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: AppColors.white),
         ),
       ),
       body: Column(
@@ -62,7 +63,7 @@ class HomeScreen extends ConsumerWidget {
             child: ImageEditor(),
           ),
           Container(
-            color: Colors.black,
+            color: AppColors.black,
             child: Column(
               children: [
                 Row(

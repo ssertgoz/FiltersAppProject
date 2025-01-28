@@ -1,5 +1,8 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+
+import '../core/constants/app_colors.dart';
 
 class ComparisonSlider extends StatefulWidget {
   final File beforeImage;
@@ -61,7 +64,7 @@ class _ComparisonSliderState extends State<ComparisonSlider> {
                 bottom: 0,
                 child: Container(
                   width: 2,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
 
@@ -72,19 +75,20 @@ class _ComparisonSliderState extends State<ComparisonSlider> {
                 child: GestureDetector(
                   onHorizontalDragUpdate: (details) {
                     setState(() {
-                      _sliderPosition = (_sliderPosition + details.delta.dx / width)
-                          .clamp(0.0, 1.0);
+                      _sliderPosition =
+                          (_sliderPosition + details.delta.dx / width)
+                              .clamp(0.0, 1.0);
                     });
                   },
                   child: Container(
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
+                          color: AppColors.black87.withOpacity(0.3),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
@@ -92,7 +96,7 @@ class _ComparisonSliderState extends State<ComparisonSlider> {
                     ),
                     child: const Icon(
                       Icons.compare_arrows,
-                      color: Colors.black,
+                      color: AppColors.black87,
                       size: 20,
                     ),
                   ),
@@ -104,14 +108,15 @@ class _ComparisonSliderState extends State<ComparisonSlider> {
                 child: GestureDetector(
                   onHorizontalDragUpdate: (details) {
                     setState(() {
-                      _sliderPosition = (_sliderPosition + details.delta.dx / width)
-                          .clamp(0.0, 1.0);
+                      _sliderPosition =
+                          (_sliderPosition + details.delta.dx / width)
+                              .clamp(0.0, 1.0);
                     });
                   },
                   onTapDown: (details) {
                     setState(() {
-                      _sliderPosition = (details.localPosition.dx / width)
-                          .clamp(0.0, 1.0);
+                      _sliderPosition =
+                          (details.localPosition.dx / width).clamp(0.0, 1.0);
                     });
                   },
                 ),

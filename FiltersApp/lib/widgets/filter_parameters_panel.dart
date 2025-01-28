@@ -7,6 +7,8 @@ import '../models/filter.dart';
 import '../models/filter_parameter.dart';
 import '../providers/image_provider.dart';
 import '../providers/selected_filter_provider.dart';
+import '../providers/filter_selection_provider.dart';
+import '../core/constants/app_colors.dart';
 
 class FilterParametersPanel extends ConsumerStatefulWidget {
   final FilterConfig? filterConfig;
@@ -82,7 +84,7 @@ class _FilterParametersPanelState extends ConsumerState<FilterParametersPanel> {
             child: Row(
               spacing: 8,
               children: [
-                const Icon(Icons.tune, color: Colors.white70, size: 20),
+                const Icon(Icons.tune, color: AppColors.white70, size: 20),
                 Expanded(
                   child: Slider(
                     value: param.currentValue,
@@ -90,8 +92,8 @@ class _FilterParametersPanelState extends ConsumerState<FilterParametersPanel> {
                     max: param.maxValue,
                     divisions: ((param.maxValue - param.minValue) / param.step)
                         .round(),
-                    activeColor: Colors.pink,
-                    inactiveColor: Colors.grey[800],
+                    activeColor: AppColors.pink,
+                    inactiveColor: AppColors.grey800,
                     onChanged: (value) => _onSliderChanged(param, value),
                   ),
                 ),
@@ -100,7 +102,7 @@ class _FilterParametersPanelState extends ConsumerState<FilterParametersPanel> {
                   child: Text(
                     param.currentValue.toStringAsFixed(1),
                     style: const TextStyle(
-                      color: Colors.white70,
+                      color: AppColors.white70,
                       fontSize: 14,
                     ),
                   ),

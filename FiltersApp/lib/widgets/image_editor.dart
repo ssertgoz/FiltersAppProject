@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/constants/app_colors.dart';
 import '../providers/compare_provider.dart';
 import '../providers/image_provider.dart';
 import 'comparison_slider.dart';
@@ -25,7 +26,7 @@ class ImageEditor extends ConsumerWidget {
             child: Container(
               margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.grey[900],
+                color: AppColors.grey900,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: ClipRRect(
@@ -41,12 +42,12 @@ class ImageEditor extends ConsumerWidget {
                             Icon(
                               Icons.add_photo_alternate,
                               size: 48,
-                              color: Colors.white70,
+                              color: AppColors.white70,
                             ),
                             SizedBox(height: 8),
                             Text(
                               'Tap to select an image',
-                              style: TextStyle(color: Colors.white70),
+                              style: TextStyle(color: AppColors.white70),
                             ),
                           ],
                         ),
@@ -67,7 +68,7 @@ class ImageEditor extends ConsumerWidget {
                       ),
                     if (imageState.isProcessing)
                       Container(
-                        color: Colors.black54,
+                        color: AppColors.black54,
                         child: const Center(
                           child: CircularProgressIndicator(),
                         ),
@@ -80,7 +81,7 @@ class ImageEditor extends ConsumerWidget {
         ),
         if (imageState.currentImage != null)
           Container(
-            color: Colors.black87,
+            color: AppColors.black87,
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -112,8 +113,9 @@ class ImageEditor extends ConsumerWidget {
                           margin: const EdgeInsets.symmetric(horizontal: 4),
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color:
-                                  isSelected ? Colors.pink : Colors.transparent,
+                              color: isSelected
+                                  ? AppColors.pink
+                                  : AppColors.transparent,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(8),
@@ -146,7 +148,7 @@ class ImageEditor extends ConsumerWidget {
                                         : imageState
                                             .history[index - 1].filter.name,
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.white,
                                       fontSize: 10,
                                       fontWeight: isSelected
                                           ? FontWeight.bold
@@ -170,12 +172,12 @@ class ImageEditor extends ConsumerWidget {
                                     child: Container(
                                       padding: const EdgeInsets.all(2),
                                       decoration: const BoxDecoration(
-                                        color: Colors.pink,
+                                        color: AppColors.pink,
                                         shape: BoxShape.circle,
                                       ),
                                       child: const Icon(
                                         Icons.close,
-                                        color: Colors.white,
+                                        color: AppColors.white,
                                         size: 14,
                                       ),
                                     ),

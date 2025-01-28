@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/constants/app_colors.dart';
 import '../models/filter.dart';
 
 class FilterThumbnail extends StatelessWidget {
@@ -105,14 +106,18 @@ class FilterThumbnail extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: isSelected ? Colors.pink : Colors.transparent,
+                    color: isSelected
+                        ? AppColors.selectedBorder
+                        : AppColors.unselectedBorder,
                     width: 2,
                   ),
-                  color: Colors.grey[800],
+                  color: AppColors.grey800,
                 ),
                 child: Icon(
                   _filterIcon,
-                  color: isSelected ? Colors.pink : Colors.white70,
+                  color: isSelected
+                      ? AppColors.selectedIcon
+                      : AppColors.unselectedIcon,
                   size: 30,
                 ),
               ),
@@ -120,7 +125,9 @@ class FilterThumbnail extends StatelessWidget {
               Text(
                 filter.name,
                 style: TextStyle(
-                  color: isSelected ? Colors.pink : Colors.white,
+                  color: isSelected
+                      ? AppColors.selectedText
+                      : AppColors.unselectedText,
                   fontSize: 12,
                 ),
                 textAlign: TextAlign.center,
