@@ -32,6 +32,13 @@ class FilterCategories extends ConsumerWidget {
               ref.read(filterCategoryProvider.notifier).state = FilterCategory.effects;
             },
           ),
+          CategoryChip(
+            label: 'CLOUD',
+            isSelected: FilterCategory.cloud == selectedCategory,
+            onTap: () {
+              ref.read(filterCategoryProvider.notifier).state = FilterCategory.cloud;
+            },
+          ),
         ],
       ),
     );

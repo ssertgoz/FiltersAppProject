@@ -4,6 +4,7 @@ import '../models/filter.dart';
 enum FilterCategory {
   basic,
   effects,
+  cloud
 }
 
 final filterCategoryProvider = StateProvider<FilterCategory>((ref) => FilterCategory.basic);
@@ -13,19 +14,29 @@ final filterProvider = Provider<List<Filter>>((ref) {
 
   final filtersByCategory = {
     FilterCategory.basic: [
-      Filter.getFilterByType(FilterType.original),
-      Filter.getFilterByType(FilterType.brightness),
-      Filter.getFilterByType(FilterType.contrast),
-      Filter.getFilterByType(FilterType.saturation),
-      Filter.getFilterByType(FilterType.blur),
-      Filter.getFilterByType(FilterType.sharpen),
+      Filter(type: FilterType.original, name: FilterType.original.displayName),
+      Filter(type: FilterType.brightness, name: FilterType.brightness.displayName),
+      Filter(type: FilterType.contrast, name: FilterType.contrast.displayName),
+      Filter(type: FilterType.saturation, name: FilterType.saturation.displayName),
+      Filter(type: FilterType.blur, name: FilterType.blur.displayName),
+      Filter(type: FilterType.sharpen, name: FilterType.sharpen.displayName),
     ],
     FilterCategory.effects: [
-      Filter.getFilterByType(FilterType.grayscale),
-      Filter.getFilterByType(FilterType.edgeDetection),
-      Filter.getFilterByType(FilterType.sepia),
-      Filter.getFilterByType(FilterType.invert),
-      Filter.getFilterByType(FilterType.threshold),
+      Filter(type: FilterType.grayscale, name: FilterType.grayscale.displayName),
+      Filter(type: FilterType.edgeDetection, name: FilterType.edgeDetection.displayName),
+      Filter(type: FilterType.sepia, name: FilterType.sepia.displayName),
+      Filter(type: FilterType.invert, name: FilterType.invert.displayName),
+      Filter(type: FilterType.threshold, name: FilterType.threshold.displayName),
+    ],
+    FilterCategory.cloud: [
+      Filter(
+        type: FilterType.cloudEdgeDetection,
+        name: FilterType.cloudEdgeDetection.displayName,
+      ),
+      Filter(
+        type: FilterType.cloudBlur,
+        name: FilterType.cloudBlur.displayName,
+      ),
     ],
   };
 

@@ -38,11 +38,58 @@ class FilterThumbnail extends StatelessWidget {
         return Icons.tonality;
       case FilterType.original:
         return Icons.restart_alt;
+      case FilterType.cloudEdgeDetection:
+        return Icons.auto_graph;
+      case FilterType.cloudBlur:
+        return Icons.blur_on;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    String imagePath;
+    switch (filter.type) {
+      case FilterType.original:
+        imagePath = 'assets/images/original.png';
+        break;
+      case FilterType.grayscale:
+        imagePath = 'assets/images/grayscale.png';
+        break;
+      case FilterType.blur:
+        imagePath = 'assets/images/blur.png';
+        break;
+      case FilterType.sharpen:
+        imagePath = 'assets/images/sharpen.png';
+        break;
+      case FilterType.edgeDetection:
+        imagePath = 'assets/images/edge_detection.png';
+        break;
+      case FilterType.brightness:
+        imagePath = 'assets/images/brightness.png';
+        break;
+      case FilterType.contrast:
+        imagePath = 'assets/images/contrast.png';
+        break;
+      case FilterType.saturation:
+        imagePath = 'assets/images/saturation.png';
+        break;
+      case FilterType.sepia:
+        imagePath = 'assets/images/sepia.png';
+        break;
+      case FilterType.invert:
+        imagePath = 'assets/images/invert.png';
+        break;
+      case FilterType.threshold:
+        imagePath = 'assets/images/threshold.png';
+        break;
+      case FilterType.cloudEdgeDetection:
+        imagePath = 'assets/images/edge_detection.png';
+        break;
+      case FilterType.cloudBlur:
+        imagePath = 'assets/images/blur.png';
+        break;
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: Padding(

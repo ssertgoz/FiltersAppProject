@@ -11,7 +11,9 @@ enum FilterType {
   saturation('Saturation'),
   sepia('Sepia'),
   invert('Invert'),
-  threshold('Threshold');
+  threshold('Threshold'),
+  cloudEdgeDetection('Cloud Edge Detection'),
+  cloudBlur('Cloud Blur');
 
   final String displayName;
   const FilterType(this.displayName);
@@ -66,6 +68,10 @@ class Filter {
         return FilterType.invert;
       case 'threshold':
         return FilterType.threshold;
+      case 'cloud edge detection':
+        return FilterType.cloudEdgeDetection;
+      case 'cloud blur':
+        return FilterType.cloudBlur;
       default:
         return FilterType.original;
     }

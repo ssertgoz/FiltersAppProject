@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 
+import '../core/services/api_service.dart';
 import '../models/filter.dart';
 import '../services/image_processing_service.dart';
 
@@ -91,64 +92,78 @@ class ImageNotifier extends StateNotifier<ImageState> {
     }
   }
 
-  Future<void> applyFilter(Filter filter, {bool isNewFilter = true}) async {
-    if (state.originalImage == null) return;
+  Future<void> applyFilter(Filter filter, {bool isNewFilter = false}) async {
+    if (state.originalImage == null || state.currentImage == null) return;
 
     state = state.copyWith(isProcessing: true);
 
     try {
-      // Determine input image based on current state and operation
-      File inputImage;
-      if (state.history.isEmpty) {
-        // First filter always uses original image
-        inputImage = state.originalImage!;
-      } else if (!isNewFilter) {
-        // When updating a filter, use the input that was used to create it
-        inputImage = state.currentStepIndex == 0
-            ? state.originalImage!
-            : state.history[state.currentStepIndex - 1].image;
+      if (filter.type == FilterType.cloudEdgeDetection) {
+        final apiService = ApiService();
+        final processedImage = await apiService.applyEdgeDetection(state.currentImage!);
+        if (processedImage != null) {
+          addToHistory(processedImage, filter);
+        }
+      } else if (filter.type == FilterType.cloudBlur) {
+        final apiService = ApiService();
+        final processedImage = await apiService.applyBlur(state.currentImage!);
+        if (processedImage != null) {
+          addToHistory(processedImage, filter);
+        }
       } else {
-        // New filter always uses the last filtered image as input
-        inputImage = state.history.last.image;
-      }
-
-      final processedImage = await _imageProcessingService.processImage(
-        inputImage,
-        filter,
-      );
-
-      if (processedImage != null) {
-        List<ProcessingStep> newHistory;
-
-        if (!isNewFilter && state.currentStepIndex >= 0) {
-          // Updating existing filter
-          newHistory = List<ProcessingStep>.from(state.history);
-          newHistory[state.currentStepIndex] = ProcessingStep(
-            filter: filter,
-            image: processedImage,
-          );
-          // Remove subsequent steps if we're modifying a previous step
-          if (state.currentStepIndex < newHistory.length - 1) {
-            newHistory = newHistory.sublist(0, state.currentStepIndex + 1);
-          }
+        // Existing filter processing logic
+        File inputImage;
+        if (state.history.isEmpty) {
+          // First filter always uses original image
+          inputImage = state.originalImage!;
+        } else if (!isNewFilter) {
+          // When updating a filter, use the input that was used to create it
+          inputImage = state.currentStepIndex == 0
+              ? state.originalImage!
+              : state.history[state.currentStepIndex - 1].image;
         } else {
-          // Adding new filter
-          newHistory = List<ProcessingStep>.from(state.history)
-            ..add(ProcessingStep(
-              filter: filter,
-              image: processedImage,
-            ));
+          // New filter always uses the last filtered image as input
+          inputImage = state.history.last.image;
         }
 
-        state = state.copyWith(
-          currentImage: processedImage,
-          history: newHistory,
-          currentStepIndex:
-              isNewFilter ? newHistory.length - 1 : state.currentStepIndex,
-          isProcessing: false,
+        final processedImage = await _imageProcessingService.processImage(
+          inputImage,
+          filter,
         );
-      } else {
-        state = state.copyWith(isProcessing: false);
+
+        if (processedImage != null) {
+          List<ProcessingStep> newHistory;
+
+          if (!isNewFilter && state.currentStepIndex >= 0) {
+            // Updating existing filter
+            newHistory = List<ProcessingStep>.from(state.history);
+            newHistory[state.currentStepIndex] = ProcessingStep(
+              filter: filter,
+              image: processedImage,
+            );
+            // Remove subsequent steps if we're modifying a previous step
+            if (state.currentStepIndex < newHistory.length - 1) {
+              newHistory = newHistory.sublist(0, state.currentStepIndex + 1);
+            }
+          } else {
+            // Adding new filter
+            newHistory = List<ProcessingStep>.from(state.history)
+              ..add(ProcessingStep(
+                filter: filter,
+                image: processedImage,
+              ));
+          }
+
+          state = state.copyWith(
+            currentImage: processedImage,
+            history: newHistory,
+            currentStepIndex:
+                isNewFilter ? newHistory.length - 1 : state.currentStepIndex,
+            isProcessing: false,
+          );
+        } else {
+          state = state.copyWith(isProcessing: false);
+        }
       }
     } catch (e) {
       debugPrint('Error applying filter: $e');
@@ -270,5 +285,20 @@ class ImageNotifier extends StateNotifier<ImageState> {
 
   void clearImage() {
     state = ImageState();
+  }
+
+  void addToHistory(File processedImage, Filter filter) {
+    final newHistory = List<ProcessingStep>.from(state.history)
+      ..add(ProcessingStep(
+        filter: filter,
+        image: processedImage,
+      ));
+
+    state = state.copyWith(
+      currentImage: processedImage,
+      history: newHistory,
+      currentStepIndex: newHistory.length - 1,
+      isProcessing: false,
+    );
   }
 }

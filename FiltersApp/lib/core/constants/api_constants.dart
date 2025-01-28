@@ -1,6 +1,19 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+
 class ApiConstants {
-  // Base URL
-  static const String baseUrl = 'http://localhost:8000';
+  // Base URL - handle different platforms
+  static String get baseUrl {
+    if (kIsWeb) {
+      return 'http://localhost:8000';
+    } else if (Platform.isAndroid) {
+      // Android emulator needs 10.0.2.2 to connect to host machine
+      return 'http://10.0.2.2:8000';
+    } else {
+      // iOS simulator and desktop can use localhost
+      return 'http://localhost:8000';
+    }
+  }
   
   // Endpoints
   static const String healthCheck = '/';
