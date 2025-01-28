@@ -1,0 +1,42 @@
+{
+  "buildFiles": [
+    "/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/CMakeLists.txt",
+    "/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/opencv/sdk/native/jni/OpenCVConfig.cmake",
+    "/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/opencv/sdk/native/jni/abi-x86_64/OpenCVConfig.cmake",
+    "/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/opencv/sdk/native/jni/abi-x86_64/OpenCVModules-release.cmake",
+    "/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/opencv/sdk/native/jni/abi-x86_64/OpenCVModules.cmake"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/serdar/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/.cxx/Debug/3yy2d712/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/serdar/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/.cxx/Debug/3yy2d712/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "image_processor::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "x86_64",
+      "artifactName": "image_processor",
+      "output": "/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/.cxx/Debug/3yy2d712/x86_64/lib/libimage_processor.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/Users/serdar/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/Users/serdar/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/.cxx/Debug/3yy2d712/x86_64",
+  "command": "/Users/serdar/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=x86_64-none-linux-android21 --sysroot=/Users/serdar/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -Dimage_processor_EXPORTS -I/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp -isystem /Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/opencv/sdk/native/jni/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -frtti -fexceptions -fno-limit-debug-info  -fPIC -o CMakeFiles/image_processor.dir/image_processor.cpp.o -c /Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/image_processor.cpp",
+  "file": "/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/image_processor.cpp"
+}
+]

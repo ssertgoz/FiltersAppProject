@@ -1,0 +1,3 @@
+# ninja log v5
+0	610	1738019357919761055	CMakeFiles/image_processor.dir/image_processor.cpp.o	349493891ff2ce7d
+612	1030	1738019358294638504	lib/libimage_processor.so	a732d48798d72e50

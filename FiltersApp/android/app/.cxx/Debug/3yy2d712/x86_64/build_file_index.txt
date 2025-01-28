@@ -1,0 +1,5 @@
+/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/CMakeLists.txt
+/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/opencv/sdk/native/jni/OpenCVConfig.cmake
+/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/opencv/sdk/native/jni/abi-x86_64/OpenCVConfig.cmake
+/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/opencv/sdk/native/jni/abi-x86_64/OpenCVModules-release.cmake
+/Users/serdar/PersonalProjects/FiltersAppProject/FiltersApp/android/app/src/main/cpp/opencv/sdk/native/jni/abi-x86_64/OpenCVModules.cmake
