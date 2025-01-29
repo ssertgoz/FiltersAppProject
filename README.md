@@ -1,6 +1,76 @@
-# Filters App
+# FiltersAppProject
 
 A Flutter application that implements various image filters using OpenCV native code.
+
+## Features
+
+- Local image filters using native code (C++)
+- Cloud-based filters using FastAPI backend
+- Real-time filter preview
+- Filter comparison slider
+- Filter parameter adjustments
+- Save processed images to gallery
+
+
+## Project Structure
+
+The project consists of two main parts:
+
+### Frontend (FiltersApp)
+- Flutter application with native C++ integration
+- Real-time image processing
+- Intuitive UI for filter selection and adjustment
+
+
+lib/
+│   ├── constants/           # App-wide constants
+│   │   ├── app_colors.dart
+│   │   ├── app_strings.dart
+│   │   ├── app_images.dart
+│   │   └── filter_constants.dart
+│   ├── core/               # Core functionality
+│   │   └── services/
+│   ├── models/            # Data models
+│   │   ├── filter.dart
+│   │   └── filter_message.dart
+│   ├── providers/         # State management
+│   │   ├── filter_provider.dart
+│   │   ├── image_provider.dart
+│   │   └── compare_provider.dart
+│   ├── screens/          # UI screens
+│   │   ├── home_screen.dart
+│   │   └── splash_screen.dart
+│   ├── services/         # Business logic
+│   │   ├── api_service.dart
+│   │   └── image_processing_service.dart
+│   └── widgets/          # Reusable widgets
+│       ├── filter_list.dart
+│       ├── image_editor.dart
+│       └── comparison_slider.dart
+
+### Backend (filters_backend)
+- FastAPI server for cloud-based filters
+- OpenCV integration for image processing
+- RESTful API endpoints
+
+filters_backend/
+├── app/
+│   ├── __init__.py
+│   └── main.py           # FastAPI application
+├── tests/
+│   ├── __init__.py
+│   ├── test_api.py
+│   └── test_image.jpg
+├── requirements.txt      # Python dependencies
+└── venv/   
+
+## Getting Started
+
+### Prerequisites
+- Flutter SDK
+- Python 3.8+
+- OpenCV
+- CMake
 
 ## Android Setup
 
@@ -11,22 +81,6 @@ A Flutter application that implements various image filters using OpenCV native 
 - OpenCV Android SDK
 
 ### Project Structure
-
-## Project Structure
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
     android/
     ├── app/
     │ ├── src/
