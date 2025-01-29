@@ -13,7 +13,9 @@ A Flutter application with python backend fast API that implements various image
 
 ## Demo Video
 
-[Watch the video](demo_video.mp4)
+https://github.com/user-attachments/assets/96897cff-8760-4163-9474-ef4d9709386c
+
+
 
 
 
