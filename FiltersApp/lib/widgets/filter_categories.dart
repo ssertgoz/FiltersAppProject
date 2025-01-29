@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/constants/filter_constants.dart';
 import '../providers/filter_provider.dart';
 import 'category_chip.dart';
+import '../core/constants/app_strings.dart';
 
 class FilterCategories extends ConsumerWidget {
   final FilterCategory selectedCategory;
@@ -21,7 +22,7 @@ class FilterCategories extends ConsumerWidget {
       child: Row(
         children: [
           CategoryChip(
-            label: 'BASIC',
+            label: AppStrings.basicCategory,
             isSelected: FilterCategory.basic == selectedCategory,
             onTap: () {
               ref.read(filterCategoryProvider.notifier).state =
@@ -29,7 +30,7 @@ class FilterCategories extends ConsumerWidget {
             },
           ),
           CategoryChip(
-            label: 'EFFECTS',
+            label: AppStrings.effectsCategory,
             isSelected: FilterCategory.effects == selectedCategory,
             onTap: () {
               ref.read(filterCategoryProvider.notifier).state =
@@ -37,7 +38,7 @@ class FilterCategories extends ConsumerWidget {
             },
           ),
           CategoryChip(
-            label: 'CLOUD',
+            label: AppStrings.cloudCategory,
             isSelected: FilterCategory.cloud == selectedCategory,
             onTap: () {
               ref.read(filterCategoryProvider.notifier).state =

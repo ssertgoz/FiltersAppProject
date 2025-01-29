@@ -6,6 +6,7 @@ import '../providers/compare_provider.dart';
 import '../widgets/filter_list.dart';
 import '../widgets/image_editor.dart';
 import '../core/constants/app_colors.dart';
+import '../core/constants/app_strings.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -44,7 +45,13 @@ class HomeScreen extends ConsumerWidget {
                       if (success) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Image saved to gallery'),
+                            content: Text(AppStrings.imageSavedToGallery),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(AppStrings.errorSavingToGallery),
                           ),
                         );
                       }
@@ -53,7 +60,7 @@ class HomeScreen extends ConsumerWidget {
             ),
         ],
         title: const Text(
-          'Filters',
+          AppStrings.filtersTitle,
           style: TextStyle(color: AppColors.white),
         ),
       ),

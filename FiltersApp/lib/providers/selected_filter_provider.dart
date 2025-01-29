@@ -1,12 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../models/filter.dart';
-import '../models/filter_parameter.dart';
 
 class SelectedFilterNotifier extends StateNotifier<Filter> {
-  SelectedFilterNotifier() : super(Filter(
-    type: FilterType.original,
-    name: FilterType.original.displayName,
-  ));
+  SelectedFilterNotifier()
+      : super(Filter(
+          type: FilterType.original,
+          name: FilterType.original.displayName,
+        ));
 
   void updateFilter(Filter filter) {
     state = filter;
@@ -21,6 +22,7 @@ class SelectedFilterNotifier extends StateNotifier<Filter> {
   }
 }
 
-final selectedFilterProvider = StateNotifierProvider<SelectedFilterNotifier, Filter>((ref) {
+final selectedFilterProvider =
+    StateNotifierProvider<SelectedFilterNotifier, Filter>((ref) {
   return SelectedFilterNotifier();
 });

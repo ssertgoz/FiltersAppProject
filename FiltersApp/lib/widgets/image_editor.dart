@@ -5,6 +5,7 @@ import '../core/constants/app_colors.dart';
 import '../providers/compare_provider.dart';
 import '../providers/image_provider.dart';
 import 'comparison_slider.dart';
+import '../core/constants/app_strings.dart';
 
 class ImageEditor extends ConsumerWidget {
   const ImageEditor({super.key});
@@ -46,7 +47,7 @@ class ImageEditor extends ConsumerWidget {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              'Tap to select an image',
+                              AppStrings.tapToSelectImage,
                               style: TextStyle(color: AppColors.white70),
                             ),
                           ],

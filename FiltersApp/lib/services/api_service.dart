@@ -1,7 +1,9 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/foundation.dart';
-import '../constants/api_constants.dart';
+import 'package:http/http.dart' as http;
+
+import '../core/constants/api_constants.dart';
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
@@ -33,7 +35,7 @@ class ApiService {
       );
 
       final response = await request.send();
-      
+
       if (response.statusCode == 200) {
         final bytes = await response.stream.toBytes();
         final tempDir = await Directory.systemTemp.createTemp();
@@ -63,7 +65,7 @@ class ApiService {
       );
 
       final response = await request.send();
-      
+
       if (response.statusCode == 200) {
         final bytes = await response.stream.toBytes();
         final tempDir = await Directory.systemTemp.createTemp();
@@ -77,4 +79,4 @@ class ApiService {
       return null;
     }
   }
-} 
+}

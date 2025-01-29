@@ -7,8 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 
-import '../core/services/api_service.dart';
 import '../models/filter.dart';
+import '../services/api_service.dart';
 import '../services/image_processing_service.dart';
 
 class ImageState {
@@ -100,7 +100,8 @@ class ImageNotifier extends StateNotifier<ImageState> {
     try {
       if (filter.type == FilterType.cloudEdgeDetection) {
         final apiService = ApiService();
-        final processedImage = await apiService.applyEdgeDetection(state.currentImage!);
+        final processedImage =
+            await apiService.applyEdgeDetection(state.currentImage!);
         if (processedImage != null) {
           addToHistory(processedImage, filter);
         }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/constants/app_colors.dart';
+import '../core/constants/app_strings.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -18,8 +19,8 @@ class SplashScreen extends StatelessWidget {
               height: 200,
             ),
             const SizedBox(height: 24),
-            const Text(
-              'FiltersApp',
+            Text(
+              AppStrings.appName,
               style: TextStyle(
                 color: AppColors.white,
                 fontSize: 32,
