@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../core/constants/app_colors.dart';
-import '../core/constants/app_strings.dart';
+
+import '../constants/app_colors.dart';
+import '../constants/app_strings.dart';
+import '../constants/app_images.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -14,12 +16,12 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/images/splash_image.jpg',
+              AppImages.splashImage,
               width: 200,
               height: 200,
             ),
             const SizedBox(height: 24),
-            Text(
+            const Text(
               AppStrings.appName,
               style: TextStyle(
                 color: AppColors.white,

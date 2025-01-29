@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../core/constants/app_colors.dart';
+import '../constants/app_colors.dart';
 
 class ComparisonSlider extends StatefulWidget {
   final File beforeImage;

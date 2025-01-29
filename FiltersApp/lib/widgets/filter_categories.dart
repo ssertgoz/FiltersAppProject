@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/constants/filter_constants.dart';
+import '../constants/app_strings.dart';
+import '../constants/filter_constants.dart';
 import '../providers/filter_provider.dart';
 import 'category_chip.dart';
-import '../core/constants/app_strings.dart';
 
 class FilterCategories extends ConsumerWidget {
   final FilterCategory selectedCategory;

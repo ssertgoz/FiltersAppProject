@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/constants/app_colors.dart';
+import '../constants/app_colors.dart';
 import '../models/filter.dart';
 import '../models/filter_config.dart';
 import '../models/filter_parameter.dart';

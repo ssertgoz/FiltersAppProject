@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/constants/filter_constants.dart';
+import '../constants/filter_constants.dart';
 import '../models/filter.dart';
 
 final filterCategoryProvider =

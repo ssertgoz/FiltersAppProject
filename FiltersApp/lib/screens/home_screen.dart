@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/image_provider.dart';
+import '../constants/app_colors.dart';
+import '../constants/app_strings.dart';
 import '../providers/compare_provider.dart';
+import '../providers/image_provider.dart';
 import '../widgets/filter_list.dart';
 import '../widgets/image_editor.dart';
-import '../core/constants/app_colors.dart';
-import '../core/constants/app_strings.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -31,7 +31,8 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           if (!hasImage)
             IconButton(
-              icon: const Icon(Icons.add_photo_alternate, color: AppColors.white),
+              icon:
+                  const Icon(Icons.add_photo_alternate, color: AppColors.white),
               onPressed: () => ref.read(imageProvider.notifier).pickImage(),
             ),
           if (hasImage)
@@ -78,24 +79,27 @@ class HomeScreen extends ConsumerWidget {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.undo),
-                      onPressed: imageState.hasFilteredImage && imageState.canUndo
-                          ? () => ref.read(imageProvider.notifier).undo()
-                          : null,
+                      onPressed:
+                          imageState.hasFilteredImage && imageState.canUndo
+                              ? () => ref.read(imageProvider.notifier).undo()
+                              : null,
                     ),
                     IconButton(
                       icon: const Icon(Icons.compare_arrows),
                       onPressed: hasImage
                           ? () {
                               final isComparing = ref.read(compareProvider);
-                              ref.read(compareProvider.notifier).state = !isComparing;
+                              ref.read(compareProvider.notifier).state =
+                                  !isComparing;
                             }
                           : null,
                     ),
                     IconButton(
                       icon: const Icon(Icons.redo),
-                      onPressed: imageState.hasFilteredImage && imageState.canRedo
-                          ? () => ref.read(imageProvider.notifier).redo()
-                          : null,
+                      onPressed:
+                          imageState.hasFilteredImage && imageState.canRedo
+                              ? () => ref.read(imageProvider.notifier).redo()
+                              : null,
                     ),
                   ],
                 ),

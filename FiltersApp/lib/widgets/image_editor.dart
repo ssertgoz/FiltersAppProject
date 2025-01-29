@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/constants/app_colors.dart';
+import '../constants/app_colors.dart';
+import '../constants/app_strings.dart';
 import '../providers/compare_provider.dart';
 import '../providers/image_provider.dart';
 import 'comparison_slider.dart';
-import '../core/constants/app_strings.dart';
 
 class ImageEditor extends ConsumerWidget {
   const ImageEditor({super.key});

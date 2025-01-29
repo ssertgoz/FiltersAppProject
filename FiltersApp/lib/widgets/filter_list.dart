@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/constants/filter_constants.dart';
+import '../constants/filter_constants.dart';
 import '../providers/filter_provider.dart';
 import '../providers/filter_selection_provider.dart';
 import '../providers/selected_filter_provider.dart';

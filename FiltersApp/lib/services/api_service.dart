@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import '../core/constants/api_constants.dart';
+import '../constants/api_constants.dart';
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();

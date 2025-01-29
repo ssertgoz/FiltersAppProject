@@ -1,4 +1,4 @@
-import 'package:filters_app/core/constants/filter_constants.dart';
+import 'package:filters_app/constants/filter_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/filter.dart';

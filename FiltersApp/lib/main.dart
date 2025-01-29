@@ -1,3 +1,4 @@
+import 'package:filters_app/constants/app_strings.dart';
 import 'package:filters_app/services/image_processing_bindings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'FiltersApp',
+      title: AppStrings.appName,
       theme: ThemeData(
         primarySwatch: Colors.pink,
         scaffoldBackgroundColor: Colors.black,
