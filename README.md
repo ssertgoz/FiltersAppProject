@@ -1,6 +1,6 @@
 # FiltersAppProject
 
-A Flutter application with python backend fast APIthat implements various image filters using OpenCV native code and python backend with opencv. 
+A Flutter application with python backend fast API that implements various image filters using OpenCV native code and python with opencv. 
 
 ## Features
 
