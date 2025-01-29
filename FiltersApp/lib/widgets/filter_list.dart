@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/filter_parameter.dart';
+import '../core/constants/filter_constants.dart';
 import '../providers/filter_provider.dart';
 import '../providers/filter_selection_provider.dart';
 import '../providers/selected_filter_provider.dart';
@@ -18,7 +18,7 @@ class FilterList extends ConsumerWidget {
     final selectedCategory = ref.watch(filterCategoryProvider);
     final currentFilters = ref.watch(filterProvider);
     final showSlider = ref.watch(showSliderProvider);
-    final filterConfig = FilterConfig.filters[selectedFilter.name];
+    final filterConfig = FilterConstants.filters[selectedFilter.type];
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -39,7 +39,8 @@ class FilterList extends ConsumerWidget {
                 filter: filter,
                 isSelected: selectedFilter.name == filter.name,
                 onTap: () {
-                  ref.read(filterSelectionProvider.notifier)
+                  ref
+                      .read(filterSelectionProvider.notifier)
                       .handleFilterSelection(filter);
                 },
               );

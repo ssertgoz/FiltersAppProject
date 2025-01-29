@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/constants/app_colors.dart';
 import '../models/filter.dart';
+import '../models/filter_config.dart';
 import '../models/filter_parameter.dart';
 import '../providers/image_provider.dart';
 import '../providers/selected_filter_provider.dart';
-import '../providers/filter_selection_provider.dart';
-import '../core/constants/app_colors.dart';
 
 class FilterParametersPanel extends ConsumerStatefulWidget {
   final FilterConfig? filterConfig;

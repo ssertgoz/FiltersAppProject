@@ -1,7 +1,7 @@
+import 'package:filters_app/core/constants/filter_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/filter.dart';
-import '../models/filter_parameter.dart';
 import '../providers/image_provider.dart';
 import '../providers/selected_filter_provider.dart';
 
@@ -15,22 +15,18 @@ class FilterSelectionNotifier extends StateNotifier<void> {
   void handleFilterSelection(Filter filter) {
     final selectedFilter = ref.read(selectedFilterProvider);
 
-    // If already selected, toggle slider visibility
-    if (selectedFilter.name == filter.name) {
+    if (selectedFilter.type == filter.type) {
       ref.read(showSliderProvider.notifier).state =
           !ref.read(showSliderProvider);
     } else {
-      // Special handling for Original filter
-      if (filter.name.toLowerCase() == 'original') {
+      if (filter.type == FilterType.original) {
         ref.read(imageProvider.notifier).clearHistory();
-        // Reset selected filter and hide slider
         ref.read(selectedFilterProvider.notifier).updateFilter(filter);
         ref.read(showSliderProvider.notifier).state = false;
       } else {
-        // If different filter selected, select it and show slider if it has parameters
         ref.read(selectedFilterProvider.notifier).updateFilter(filter);
         ref.read(showSliderProvider.notifier).state =
-            FilterConfig.filters[filter.name]?.parameters.isNotEmpty == true;
+            FilterConstants.filters[filter.type]?.parameters.isNotEmpty == true;
         ref.read(imageProvider.notifier).applyFilter(filter, isNewFilter: true);
       }
     }
