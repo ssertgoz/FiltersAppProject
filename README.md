@@ -13,7 +13,6 @@ A Flutter application with python backend fast API that implements various image
 
 ## Demo Video
 
-[Watch the video](demo_video.mp4)
 
 
 
@@ -39,14 +38,17 @@ lib/
 │   │   ├── app_colors.dart
 │   │   ├── app_strings.dart
 │   │   ├── app_images.dart
+│   │   ├── api_constants.dart
 │   │   └── filter_constants.dart
-│   ├── core/               # Core functionality
-│   │   └── services/
 │   ├── models/            # Data models
 │   │   ├── filter.dart
+│   │   ├── filter_config.dart
+│   │   ├── filter_parameter.dart
 │   │   └── filter_message.dart
 │   ├── providers/         # State management
 │   │   ├── filter_provider.dart
+│   │   ├── selected_filter_provider.dart
+│   │   ├── filter_selection_provider.dart
 │   │   ├── image_provider.dart
 │   │   └── compare_provider.dart
 │   ├── screens/          # UI screens
@@ -54,11 +56,17 @@ lib/
 │   │   └── splash_screen.dart
 │   ├── services/         # Business logic
 │   │   ├── api_service.dart
+│   │   ├── image_processing_bindings.dart
 │   │   └── image_processing_service.dart
-│   └── widgets/          # Reusable widgets
-│       ├── filter_list.dart
-│       ├── image_editor.dart
-│       └── comparison_slider.dart
+│   │── widgets/          # Reusable widgets
+│   │   ├── filter_parameters_panel.dart
+│   │   ├── category_chip.dart
+│   │   ├── filter_thumbnail.dart
+│   │   ├── filter_categories.dart
+│   │   ├── filter_list.dart
+│   │   ├── image_editor.dart
+│   │   └── comparison_slider.dart
+│   └── main.dart
 ```
 
 ### Backend (filters_backend)
@@ -71,10 +79,6 @@ filters_backend/
 ├── app/
 │   ├── __init__.py
 │   └── main.py           # FastAPI application
-├── tests/
-│   ├── __init__.py
-│   ├── test_api.py
-│   └── test_image.jpg
 ├── requirements.txt      # Python dependencies
 └── venv/   
 ```

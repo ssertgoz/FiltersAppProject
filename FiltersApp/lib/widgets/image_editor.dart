@@ -1,3 +1,4 @@
+import 'package:filters_app/models/filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -145,7 +146,7 @@ class ImageEditor extends ConsumerWidget {
                                   const SizedBox(height: 4),
                                   Text(
                                     isOriginal
-                                        ? 'Original'
+                                        ? FilterType.original.displayName
                                         : imageState
                                             .history[index - 1].filter.name,
                                     style: TextStyle(
