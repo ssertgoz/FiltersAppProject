@@ -1,10 +1,11 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Response
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 import cv2
 from PIL import Image
 import io
+import asyncio
 
 app = FastAPI(title="Image Filter API",
              description="API for applying image filters using OpenCV",
@@ -26,6 +27,9 @@ async def root():
 @app.post("/filter/edge-detection")
 async def apply_edge_detection(file: UploadFile = File(...)):
     try:
+        # Add 3 second delay to simulate heavy processing
+        await asyncio.sleep(3)
+        
         # Read image file
         contents = await file.read()
         nparr = np.frombuffer(contents, np.uint8)
@@ -50,6 +54,9 @@ async def apply_edge_detection(file: UploadFile = File(...)):
 @app.post("/filter/blur")
 async def apply_blur(file: UploadFile = File(...)):
     try:
+        # Add 3 second delay to simulate heavy processing
+        await asyncio.sleep(3)
+        
         contents = await file.read()
         nparr = np.frombuffer(contents, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
