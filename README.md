@@ -12,6 +12,13 @@ A Flutter application with python backend fast APIthat implements various image 
 - Save processed images to gallery
 
 
+## Prerequisites
+- Flutter SDK
+- Python 3.8+
+- OpenCV
+- CMake
+
+
 ## Project Structure
 
 The project consists of two main parts:
@@ -69,12 +76,6 @@ filters_backend/
 
 ## Getting Started
 
-### Prerequisites
-- Flutter SDK
-- Python 3.8+
-- OpenCV
-- CMake
-
 ## Android Setup
 
 ### Prerequisites
@@ -83,7 +84,7 @@ filters_backend/
 - Android NDK
 - OpenCV Android SDK
 
-### Project Structure
+### Android folder Structure
     android/
     ├── app/
     │ ├── src/
@@ -218,6 +219,12 @@ filters_backend/
 - Image inversion
 
 
+
+
+
+
+
+
 # Image Filters Backend API
 
 A FastAPI-based backend service that provides image processing capabilities using OpenCV. This service is designed to work with the FiltersApp Flutter application.
@@ -232,7 +239,7 @@ A FastAPI-based backend service that provides image processing capabilities usin
 
 1. Clone the repository (if you haven't already):
 ```bash
-git clone <repository-url>
+git clone https://github.com/ssertgoz/FiltersAppProject.git
 cd filters_backend
 ```
 
@@ -269,6 +276,8 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 The server will be available at `http://localhost:8000`
+
+
 
 ## Testing the API
 
