@@ -11,6 +11,11 @@ A Flutter application with python backend fast API that implements various image
 - Filter parameter adjustments
 - Save processed images to gallery
 
+## Demo Video
+
+[Watch the video](demo_video.mp4)
+
+
 
 ## Prerequisites
 - Flutter SDK
