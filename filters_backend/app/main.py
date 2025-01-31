@@ -3,8 +3,6 @@ from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 import cv2
-from PIL import Image
-import io
 import asyncio
 
 app = FastAPI(title="Image Filter API",
